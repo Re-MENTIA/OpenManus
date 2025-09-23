@@ -185,7 +185,7 @@ Tomoriとして、ユーザーのリクエストを分析し最も役立つ応�
 4. すべての時間をJST基準のcron式に変換
 
 ## タスクカテゴリ：
-"health", "household", "work", "general"
+"health", "household", "work", "general", "chat"
 
 ## 最重要ルール：
 **絶対に守ること：**

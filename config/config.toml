@@ -30,3 +30,9 @@ retry_delay = 60
 max_retries = 3
 lang = "en"
 country = "us"
+
+# Daytona configuration - disabled (use_sandbox = false)
+[daytona]
+daytona_api_key = "dummy_key_not_used"
+daytona_server_url = "https://app.daytona.io/api"
+daytona_target = "us"

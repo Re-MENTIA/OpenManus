@@ -52,10 +52,33 @@ async def lifespan(app: FastAPI):
     global session_manager
     try:
         # Override config with environment variables
-        if "OPENAI_API_KEY" in os.environ:
+        openai_key = os.environ.get("OPENAI_API_KEY")
+        openrouter_key = os.environ.get("OPENROUTER_API_KEY")
+        if openai_key or openrouter_key:
             for llm_name, llm_config in config.llm.items():
-                if llm_config.api_key == "OPENAI_API_KEY_PLACEHOLDER":
-                    llm_config.api_key = os.environ["OPENAI_API_KEY"]
+                api_key = (llm_config.api_key or "").strip()
+                is_placeholder = api_key == "" or api_key.endswith("_API_KEY_PLACEHOLDER")
+
+                if (
+                    openrouter_key
+                    and (
+                        llm_config.api_type == "openrouter"
+                        or "openrouter.ai" in (llm_config.base_url or "")
+                    )
+                    and is_placeholder
+                ):
+                    llm_config.api_key = openrouter_key
+                    continue
+
+                if (
+                    openai_key
+                    and (
+                        llm_config.api_type == "openai"
+                        or "api.openai.com" in (llm_config.base_url or "")
+                    )
+                    and is_placeholder
+                ):
+                    llm_config.api_key = openai_key
         
         # Initialize the session manager on startup
         logger.info("Initializing OpenManus session manager...")

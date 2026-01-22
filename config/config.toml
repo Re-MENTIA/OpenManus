@@ -1,38 +1,26 @@
-# OpenManus API Server Configuration
-# This configuration is set up for integration with the LINE Bot system
+[llm] # OpenRouter:
+model = "openai/gpt-oss-120b"                 # The LLM model to use
+base_url = "https://openrouter.ai/api/v1"     # OpenRouter API base URL
+api_key = "OPENROUTER_API_KEY_PLACEHOLDER"    # Will be overridden by OPENROUTER_API_KEY
+api_type = "openrouter"
+max_tokens = 4096                             # OpenRouter uses max_tokens
+temperature = 0.7
+reasoning_effort = "high"                     # Optional: low | medium | high
+response_format = { type = "json_object" }    # JSON mode (non-tool calls only)
+extra_headers = { "HTTP-Referer" = "https://your.app", "X-Title" = "OpenManus" }
 
-[llm]
-model = "gpt-5-2025-08-07"
-base_url = "https://api.openai.com/v1"
-api_key = "OPENAI_API_KEY_PLACEHOLDER"  # Will be overridden by environment variable
-api_type = "openai"
-max_completion_tokens = 2000
-temperature = 1.0
-
-# MCP (Model Context Protocol) configuration
-[mcp]
-server_reference = "app.mcp.server"
-
-# Sandbox configuration - disabled for API server mode
-[sandbox]
-use_sandbox = false
-
-# Browser configuration - minimal setup for web scraping
-[browser]
-headless = true
-disable_security = true
-
-# Search configuration
-[search]
-engine = "Google"
-fallback_engines = ["DuckDuckGo", "Baidu", "Bing"]
-retry_delay = 60
-max_retries = 3
-lang = "en"
-country = "us"
-
-# Daytona configuration - disabled (use_sandbox = false)
+# Daytona configuration (required)
 [daytona]
 daytona_api_key = "dummy_key_not_used"
 daytona_server_url = "https://app.daytona.io/api"
 daytona_target = "us"
+extra_body = { provider = { order = ["Cerebras", "Groq"], allow_fallbacks = true } } # Provider routing (preferred order + fallback)
+
+# Optional configuration for OpenRouter vision models
+[llm.vision]
+model = "openai/gpt-4o"
+base_url = "https://openrouter.ai/api/v1"
+api_key = "OPENROUTER_API_KEY_PLACEHOLDER"
+api_type = "openrouter"
+temperature = 0.0
+extra_headers = { "HTTP-Referer" = "https://your.app", "X-Title" = "OpenManus" }
